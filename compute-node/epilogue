@@ -1,0 +1,24 @@
+#!/bin/bash
+# /var/spool/torque/mom_priv/epilogue (user/group: root/root, 0700 permissions)
+#   To be installed on each compute node in your cluster. This script is run at
+#   the end of every job. The output of this script is placed in the users
+#   stdout stream. Ultimately, the output comes from the wget command (thus the
+#   php script that will be installed on your webserver)
+# 
+# NB: replace SECRET_KEY below and make sure the same value is mirrored in
+#     report.php on the webserver. Otherwise stats collection will not work.
+# 
+
+secret=SECRET_KEY
+web_root=http://example.com/Job_Scheduler
+
+echo "Job Epilogue:"
+
+# Get host shortname in a safe way
+# (hostname -s causes problems in some places)
+host=$(hostname)
+host=${host//.*}
+
+wget -q -O - "$web_root/report.php?sec=$secret&jid=$1&uid=$2&gid=$3&name=$4&sid=$5&res=$6&used_res=$7&q=$8&acct=$9&host=$host"
+
+exit 0

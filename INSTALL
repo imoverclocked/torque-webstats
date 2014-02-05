@@ -1,0 +1,40 @@
+Nodes and the web root need to be configured with the same secret key
+(hint: look for SECRET_KEY) so that stats collection can work. By default
+the secret is set to SECRET_KEY so things will work out of the box but
+it's not recommended to keep things running this way in production.
+
+Requirements:
+
+  * PBS/Torque cluster
+  * PHP webserver (mysqli extension)
+  * MySQL DB
+
+Note: The DB could pretty easily be ported to something else if MySQL
+      finally drops off the face of the planet.
+
+Step 1:
+=======
+
+Initialize your DB using the db/schema.mysqldump file. You should have a
+username/password setup to access the DB you just created.
+
+Step 2:
+=======
+
+Install the web_root files somewhere that can run php and connect to a
+MySQL DB.
+  - Make sure you change the SECRET_KEY in report.php to some random string.
+  - Make sure you change HOSTNAME/USERNAME/PASSWORD/DB in db.php
+
+Verify that you get no errors when you visit http://your.host.com/job_scheduler/job_list.php
+
+Step 3:
+=======
+
+Install the compute-node/epilogue script to all of your compute nodes. Be sure to edit it
+to reflect your environment. (secret/web_root need to be set)
+
+Step 4:
+=======
+
+Send lots of praise in the form of patches/bug reports/feature requests to the author.
